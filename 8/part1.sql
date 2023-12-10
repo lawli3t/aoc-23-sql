@@ -1,4 +1,3 @@
-EXPLAIN (ANALYZE, COSTS, VERBOSE, BUFFERS, FORMAT JSON)
 WITH RECURSIVE dfs AS (
     SELECT
 	nodes.id AS node_id,
@@ -40,7 +39,7 @@ WITH RECURSIVE dfs AS (
     JOIN walk
 	ON walk.id = MOD(
 	    iteration,
-	    263
+	    (SELECT MAX(id) FROM walk)
 	) + 1
     JOIN nodes successor
 	ON successor.id = (
@@ -49,7 +48,6 @@ WITH RECURSIVE dfs AS (
 		ELSE nodes.r
 	    END
 	)
-    WHERE
-    iteration < 10000
+    WHERE successor_name != 'ZZZ'
 )
 SELECT * FROM dfs;
