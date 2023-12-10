@@ -1,0 +1,8 @@
+WITH RECURSIVE q AS (
+    SELECT ARRAY[1] AS a, 1 AS d
+    UNION
+    SELECT FROM (
+	SELECT ARRAY_APPEND(a, 1), d + 1 FROM q WHERE d < 10
+    )
+)
+SELECT * FROM q
