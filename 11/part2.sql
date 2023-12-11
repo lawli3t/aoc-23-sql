@@ -34,7 +34,6 @@ FROM
 WHERE
     x_shift.x = x_costs.x;
 
-EXPLAIN ANALYZE
 WITH galaxies AS (
     SELECT x, y, symbol, rank() OVER (ORDER BY y, x) AS i FROM map2 WHERE symbol = '#'
 )
