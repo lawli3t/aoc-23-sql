@@ -46,7 +46,7 @@ HAVING (
 );
 
 SELECT SUM(line) FROM (
-    SELECT SUM(line) AS line FROM vertical_reflections
-    UNION
-    SELECT SUM(line) * 100 AS line FROM horizontal_reflections
+    SELECT line AS line FROM vertical_reflections
+    UNION ALL
+    SELECT line * 100 AS line FROM horizontal_reflections
 ) x

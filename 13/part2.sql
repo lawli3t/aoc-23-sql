@@ -14,7 +14,7 @@ SELECT
     y,
     v.variation_id,
     CASE
-	WHEN x * y = v.variation_id THEN
+	WHEN x + ((y - 1) * (SELECT MAX(x) FROM patterns p WHERE p.pattern_id = patterns.pattern_id)) = v.variation_id THEN
 	    CASE 
 		WHEN symbol = '.' THEN '#'
 		WHEN symbol = '#' THEN '.'
@@ -74,13 +74,8 @@ HAVING (
     OR 0 = line - COUNT(*)
 );
 
-(SELECT line, pattern_id FROM vertical_reflections_smudge GROUP BY line, pattern_id, variation_id HAVING MIN(variation_id) != 0)
-UNION
-(SELECT line, pattern_id FROM horizontal_reflections_smudge GROUP BY line, pattern_id, variation_id HAVING MIN(variation_id) != 0);
-
 SELECT SUM(line) FROM (
-    SELECT SUM(line) AS line FROM vertical_reflections
-    UNION
-    SELECT SUM(line) * 100 AS line FROM horizontal_reflections
-) x
--- reuses part1
+    (SELECT line FROM vertical_reflections_smudge GROUP BY line, pattern_id HAVING MIN(variation_id) != 0)
+    UNION ALL
+    (SELECT line * 100 AS line FROM horizontal_reflections_smudge GROUP BY line, pattern_id HAVING MIN(variation_id) != 0)
+) x;
